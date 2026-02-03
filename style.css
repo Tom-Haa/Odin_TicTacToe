@@ -1,0 +1,178 @@
+/* ===== Minimal Reset ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+}
+
+/* ===== Theme ===== */
+:root {
+  --bg: #0d0f14;
+  --text: #f2f2f2;
+
+  /* palette */
+  --cherry-blossom: #EDAFB8; /* pink */
+  --powder-petal:  #F7E1D7;  /* light */
+  --dust-grey:     #DEDBD2;  /* neutral */
+  --ash-grey:      #B0C4B1;  /* green */
+  --iron-grey:     #4A5759;  /* dark slate */
+
+  /* UI surfaces */
+  --ui-surface: rgba(255, 255, 255, 0.06);
+  --ui-border:  rgba(255, 255, 255, 0.10);
+
+  /* Accents */
+  --accent-x: var(--cherry-blossom); /* X */
+  --accent-o: var(--ash-grey);       /* O */
+
+  /* Text */
+  --text-main: var(--text);
+  --text-muted: rgba(242, 242, 242, 0.65);
+
+  /* Highlight / feedback */
+  --highlight-soft: var(--powder-petal);
+  --highlight-neutral: var(--dust-grey);
+}
+
+/* ===== Base ===== */
+body {
+    overflow: hidden;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+
+  background: linear-gradient(180deg, #141825 0%, var(--bg) 60%);
+  background-color: var(--bg);
+}
+
+/* ===== Basics ===== */
+a {
+  color: var(--accent-x);
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* ===== Layout ===== */
+.gameContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+/* ===== Board ===== */
+#boardContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: min(360px, 92vw);
+  gap: 12px;
+  padding: 14px;
+
+  border-radius: 13px;
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+
+  aspect-ratio: 1 / 1;
+  margin-bottom: 30px;
+}
+
+/* squares */
+.square {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+
+  border-radius: 10px;
+  background: var(--ui-surface);
+  border: 1px solid var(--ui-border);
+
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+
+  cursor: pointer;
+  user-select: none;
+}
+
+/* X / O colors on squares */
+.square.is-x {
+  color: var(--accent-x);
+  text-shadow:
+    0 0 14px color-mix(in srgb, var(--accent-x) 40%, transparent);
+}
+
+.square.is-o {
+  color: var(--accent-o);
+  text-shadow:
+    0 0 14px color-mix(in srgb, var(--accent-o) 40%, transparent);
+}
+
+
+/* Hover highlight depending on turn (data-turn on board container) */
+#boardContainer[data-turn="X"] .square:hover {
+  outline: 2px solid color-mix(in srgb, var(--accent-x) 70%, transparent);
+  outline-offset: 2px;
+}
+
+#boardContainer[data-turn="O"] .square:hover {
+  outline: 2px solid color-mix(in srgb, var(--accent-o) 70%, transparent);
+  outline-offset: 2px;
+}
+
+/* Game over: disable board + winner tint */
+#boardContainer.disabled {
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+#boardContainer.win-x {
+  border-color: color-mix(in srgb, var(--accent-x) 50%, var(--ui-border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-x) 18%, transparent);
+}
+
+#boardContainer.win-o {
+  border-color: color-mix(in srgb, var(--accent-o) 50%, var(--ui-border));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-o) 18%, transparent);
+}
+
+/* ===== UI Text ===== */
+#playerDisplay,
+#message {
+  margin-top: 14px;
+}
+
+#playerDisplay {
+  font-weight: 800;
+}
+
+#message {
+  color: var(--text-muted);
+}
+
+/* Player name colors + active underline */
+.player-x { color: var(--accent-x); }
+.player-o { color: var(--accent-o); }
+
+.player-x.active,
+.player-o.active {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
